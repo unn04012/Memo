@@ -15,8 +15,7 @@
       </div>
       <div class="textbox">
         <i class="fas fa-lock"></i>
-        <input type="password" placeholder = "Password" name = "">
-        helloworld
+        <input type="password" placeholder = "Password" name = "">        
       </div>
       <input class = "btn" type="button" value = "Sign in">
     </form>
