@@ -8,29 +8,39 @@ include("./dbconn.php");
   <title>LOGIN FORM</title>
   <link rel="stylesheet" href="message.css">
   <script src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"></script>
+  <style media="screen">
+  caption{
+    text-align : left;
+    color : white;
+  }
+  table{
+    width : 125%;
+    transform : translateX(-10%);
+  }
+  </style>
 </head>
 <body>
-  <?php if(!isset($_SESSION['ss_mb_id'])) { ?>
-  <div class="login-box">
-    <h1>Login</h1>
-    <form action="">
-      <div class="textbox">
-        <i class="fas fa-user"></i>
-        <input type="text" placeholder = "Username" name = "">
+  <?php if(!isset($_SESSION['ss_u_id'])) { ?>
+    <form class="" action="./login_check.php" method="post">
+      <div class="login-box">
+        <h1>Login</h1>
+        <form action="">
+          <div class="textbox">
+            <i class="fas fa-user"></i>
+            <input type="text" placeholder = "Username" name = "u_id">
+          </div>
+          <div class="textbox">
+            <i class="fas fa-lock"></i>
+            <input type="password" placeholder = "Password" name = "u_password">
+          </div>
+          <input class = "btn" type="submit" value = "Sign in">
+        </form>
       </div>
-      <div class="textbox">
-        <i class="fas fa-lock"></i>
-        <input type="password" placeholder = "Password" name = "">
-      </div>
-      <input class = "btn" type="button" value = "Sign in">
     </form>
-  </div>
   <?php } else {?>
-    <h1>Member List</h1>
     <?php
-    $mb_id = $_SESSION['ss_mb_id'];
-
-    $sql = "SELECT COUNT(*) AS 'cnt' FROM member";
+    $u_id = $_SESSION['ss_u_id'];
+    $sql = "SELECT COUNT(*) AS 'cnt' FROM users";
     $result = mysqli_query($conn, $sql);
     $row = mysqli_fetch_assoc($result);
     $total_count = $row['cnt'];
@@ -44,7 +54,7 @@ include("./dbconn.php");
 
     $list = array();
 
-    $sql = "SELECT * FROM member ORDER BY mb_datetime desc LIMIT {$from_record}, {$page_rows}";
+    $sql = "SELECT * FROM users ORDER BY u_datetime desc LIMIT {$from_record}, {$page_rows}";
     $result = mysqli_query($conn, $sql);
     for($i = 0; $row = mysqli_fetch_assoc($result); $i++){
       $list[$i] = $row;
@@ -90,7 +100,7 @@ include("./dbconn.php");
      <div class="message-box">
        <h1>Member List</h1>
        <div class="button">
-         <a href="meno.php" onclick = "win_memo(this.href); reutrn false;" >쪽지함</a>
+         <a href="./memo.php" onclick = "win_memo(this.href); reutrn false;" >쪽지함</a>
          <a href="logout.php">로그아웃</a>
        </div>
        <table>
@@ -113,15 +123,15 @@ include("./dbconn.php");
            for($i = 0; $i<count($list); $i++){
            ?>
            <tr>
-             <td><?php echo $list[$i]['num'] ?></td>
-             <td><?php echo $list[$i]['mb_id'] ?></td>
-             <td><?php echo $list[$i]['mb_name'] ?></td>
-             <td><?php echo $list[$i]['mb_email'] ?></td>
-             <td><?php echo $list[$i]['mb_gender'] ?></td>
-             <td><?php echo $list[$i]['mb_job'] ?></td>
-             <td><?php echo $list[$i]['mb_language'] ?></td>
-             <td><?php echo $list[$i]['mb_datetime'] ?></td>
-             <td><a href = "./memo_form.php?me_recv_mb_id=<<?php echo $list[$i]['mb_id'] ?>"
+             <td><?php echo $list[$i]['u_no'] ?></td>
+             <td><?php echo $list[$i]['u_id'] ?></td>
+             <td><?php echo $list[$i]['u_name'] ?></td>
+             <td><?php echo $list[$i]['u_email'] ?></td>
+             <td><?php echo $list[$i]['u_gender'] ?></td>
+             <td><?php echo $list[$i]['u_job'] ?></td>
+             <td><?php echo $list[$i]['u_language'] ?></td>
+             <td><?php echo $list[$i]['u_datetime'] ?></td>
+             <td><a href = "./memo_form.php?me_recv_mb_id=<<?php echo $list[$i]['u_id'] ?>"
                class ="td_btn" onclick = "win_memo(this.href); return false;">쪽지보내기</a></td>
            </tr>
          <?php } ?>
