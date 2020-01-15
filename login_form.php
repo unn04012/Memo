@@ -14,8 +14,9 @@ include("./dbconn.php");
     color : white;
   }
   table{
-    width : 125%;
+    width : 130%;
     transform : translateX(-10%);
+    margin : 0 auto;
   }
   </style>
 </head>
@@ -100,7 +101,7 @@ include("./dbconn.php");
      <div class="message-box">
        <h1>Member List</h1>
        <div class="button">
-         <a href="./memo.php" onclick = "win_memo(this.href); reutrn false;" >쪽지함</a>
+           <a href="./memo.php" onclick = "win_memo(this.href); return false;" >쪽지함</a>
          <a href="logout.php">로그아웃</a>
        </div>
        <table>
