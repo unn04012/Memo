@@ -30,9 +30,9 @@ $from_record = ($page - 1) * $page_rows;  // 시작 열을 구함
 
 $list = array();
 
-$sql = "SELECT memo.*, b.u_id, b.u_name, b.u_email
-          FROM memo AS a
-          LEFT JOIN member AS b ON (a.me_{$unkind}_mb_id = b.u_id)
+$sql = "SELECT a.*, b.u_id, b.u_name, b.u_email
+          FROM memo a
+          LEFT JOIN users b ON (a.me_{$unkind}_mb_id = b.u_id)
           WHERE a.me_{$kind}_mb_id = '{$u_id}'
           ORDER BY a.me_id DESC LIMIT $from_record, {$page_rows}";
 $result = mysqli_query($conn, $sql);
@@ -44,12 +44,12 @@ for($i = 0; $row = mysqli_fetch_assoc($result); $i++){
   if($row['me_read_datetime'] == '0000-00-00 00:00:00')
       $read_datetime = '아직 읽지 않음';
   else
-      $read_datetime = $row['me_send_datetime'];
+      $read_datetime = $row['me_read_datetime'];
 
   $send_datetime = $row['me_send_datetime'];
 
   $list[$i]['send_datetime'] = $send_datetime;
-  $list[$i]['read_datetime'] = $rend_datetime;
+  $list[$i]['read_datetime'] = $read_datetime;
   $list[$i]['view_href'] = './memo_view.php?me_id='.$row['me_id'].'&amp;kind='.$kind;   // 쪽지 읽기 링크
   $list[$i]['del_href'] = './memo_delete.php?me_id='.$row['me_id'].'&amp;kind='.$kind;  // 쪽지 삭제 링크
 }
@@ -94,6 +94,16 @@ mysqli_close($conn);
     <meta charset="utf-8">
     <title>Memo</title>
     <link rel="stylesheet" href="memo.css">
+    <style media="screen">
+    a{
+      color : white;
+      text-decoration : none;
+    }
+    a:hover{
+      color : yellow;
+      transition : 0.4s;
+    }
+    </style>
   </head>
   <body>
     <div class="memo-box">
@@ -101,7 +111,7 @@ mysqli_close($conn);
       <ul class="memo">
         <li><a href="./memo.php?kind=recv">받은쪽지</a></li>
         <li><a href="./memo.php?kind=send">보낸쪽지</a></li>
-        <li><a href="./memo.php">쪽지쓰기</a></li>
+        <li><a href="./memo_form.php">쪽지쓰기</a></li>
       </ul>
 
       <table>
@@ -117,8 +127,9 @@ mysqli_close($conn);
         <tbody>
           <?php for($i=0; $i<count($list); $i++){ ?>
           <tr>
-            <td><?php echo $list[$i]['mb_name'] ?></td>
+            <td><?php echo $list[$i]['u_id'] ?></td>
             <td><?php echo $list[$i]['send_datetime'] ?></td>
+            <td><a href="<?php echo $list[$i]['view_href'] ?>"><?php echo $list[$i]['read_datetime'] ?></a> </td>
             <td><a href="<?php $list[$i]['view_href'] ?> onclick = "del(this.href); return false;"">삭제</a></td>
           </tr>
           <?php } ?>
